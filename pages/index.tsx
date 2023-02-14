@@ -1,52 +1,11 @@
-import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-
-import YouTube, { YouTubeProps } from 'react-youtube';
-
-type Item = {
-  id: string;
-  from: string;
-};
+import List from '@/components/List';
+import RequestSong from '@/components/RequestSong';
+import { YoutubePlayer } from '@/components/YoutubePlayer';
+import ItemNow from '@/components/ItemNow';
 
 export default function Home() {
-  const [queue, setQueue] = useState<Item[]>([
-    { id: 'HoSQqadfiag', from: 'streamer' },
-    { id: 'oKCQJ8w5e3E', from: 'streamer' },
-    { id: 'pnxYMsBdyxo', from: 'streamer' },
-    { id: 'b12-WUgXAzg', from: 'streamer' },
-  ]);
-
-  const [prev, setPrev] = useState<Item[]>([]);
-
-  const [list, setList] = useState<Item[]>([...prev, ...queue]);
-
-  const opts: YouTubeProps['opts'] = {
-    width: '480',
-    height: '270',
-    playerVars: {
-      // https://developers.google.com/youtube/player_parameters
-      autoplay: 1,
-    },
-  };
-
-  const onReady: YouTubeProps['onReady'] = (e) => {
-    console.log('onReady');
-    e.target.mute();
-  };
-
-  const onStateChange: YouTubeProps['onStateChange'] = (e) => {
-    console.log('onStateChange', e.data);
-    const type = e.data;
-    if (type === 0) setQueue((queue) => queue.slice(1));
-    if (type === 1) {
-      if (e.target.isMuted()) {
-        console.log('음소거');
-        e.target.unMute();
-      } else console.log('음소거 아님');
-    }
-  };
-
   return (
     <>
       <Head>
@@ -59,28 +18,13 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <div>
-        <p>개발시작</p>
-      </div>
-
-      <YouTube
-        id='player'
-        videoId={queue[0].id}
-        opts={opts}
-        onReady={onReady}
-        onStateChange={onStateChange}
-      />
-
-      <div>
-        {list.map((item, idx) => {
-          return (
-            <div key={item.id + idx}>
-              <span>
-                {item.id === queue[0].id ? <strong>{item.id}</strong> : item.id}
-              </span>
-            </div>
-          );
-        })}
+      <div className='px-4 flex justify-center'>
+        <div className='w-full max-w-[480px] p-2 flex flex-col items-center gap-4'>
+          <YoutubePlayer />
+          <RequestSong />
+          <ItemNow />
+          <List />
+        </div>
       </div>
     </>
   );
