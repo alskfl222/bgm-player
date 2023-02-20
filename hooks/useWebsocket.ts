@@ -70,7 +70,6 @@ export function useWebsocket(sessionType: string): WebsocketType {
     }
 
     return () => {
-      send('session', { id });
       ws.current?.close();
     };
 

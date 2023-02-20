@@ -41,6 +41,9 @@ export function YoutubePlayer({ queue, send }: WebsocketType) {
     if (e.data === 2) {
       send('pause', data);
     }
+    if (e.data === 3) {
+      send('buffering', data)
+    }
   };
 
   const onError: YouTubeProps['onError'] = (e) => {
