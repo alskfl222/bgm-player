@@ -1,13 +1,15 @@
 import { useState, useEffect, useRef } from 'react';
 import { WebsocketType } from '@/types';
 import ListItem from './ListItem';
+import ProgressBar from './ProgressBar';
 
 export default function Now({
   queue,
   currentTime,
   duration,
   isPlay,
-}: Omit<WebsocketType, 'send'>) {
+  send,
+}: WebsocketType) {
   const [show, setShow] = useState(false);
   const [current, setCurrent] = useState(currentTime);
   const now = useRef(null);
@@ -29,7 +31,7 @@ export default function Now({
     };
   }, [currentTime, isPlay]);
 
-  const startTimer = () => {
+  const startTimer = (): void => {
     setCurrent((curr) => curr + 1);
   };
 
@@ -53,24 +55,33 @@ export default function Now({
     <>
       {show && (
         <div className='fixed top-0 w-screen p-4 flex justify-center bg-neutral-300'>
-          <div className='w-[480px] p-4 flex justify-between items-center gap-4'>
-            <div className='font-bold whitespace-nowrap text-ellipsis overflow-hidden'>
-              <a
-                href={`https://youtu.be/${queue[0].id}`}
-                target='_blank'
-                rel='noreferrer'
-                className='text-lg'
-              >
-                {queue[0].title}
-              </a>
+          <div className='w-[480px] p-2 flex flex-col justify-center items-center gap-2'>
+            <div className='w-full flex justify-between items-center'>
+              <div className='font-bold whitespace-nowrap text-ellipsis overflow-hidden'>
+                <a
+                  href={`https://youtu.be/${queue[0].id}`}
+                  target='_blank'
+                  rel='noreferrer'
+                  className='text-lg'
+                >
+                  {queue[0].title}
+                </a>
+              </div>
+              <span className='flex-none'>{queue[0].from}</span>
             </div>
-            <span className='flex-none'>{queue[0].from}</span>
+            <div className='w-full flex justify-between items-center gap-4'>
+              <ProgressBar
+                current={current}
+                duration={duration}
+                isPlay={isPlay}
+              />
+            </div>
           </div>
         </div>
       )}
       <div ref={now}>
-        <div>
-          {current} : {duration} / {isPlay ? 'ON' : 'OFF'}
+        <div className='p-4 flex justify-between gap-4 bg-neutral-300 text-sm'>
+          <ProgressBar current={current} duration={duration} isPlay={isPlay} />
         </div>
         <ListItem item={queue[0]} idx={0} />
       </div>

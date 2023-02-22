@@ -30,6 +30,7 @@ export default function Home() {
             currentTime={currentTime}
             duration={duration}
             isPlay={isPlay}
+            send={send}
           />
           <List queue={queue} />
         </div>
