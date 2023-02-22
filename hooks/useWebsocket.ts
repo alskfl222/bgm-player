@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Item, WebsocketType } from '@/types';
 
-// const WS_SERVER_URL = process.env.NEXT_PUBLIC_CLOUD!
-const WS_SERVER_URL = process.env.NEXT_PUBLIC_LOCAL!;
+const WS_SERVER_URL = process.env.NEXT_PUBLIC_CLOUD!
+// const WS_SERVER_URL = process.env.NEXT_PUBLIC_LOCAL!;
 
 export function useWebsocket(sessionType: string): WebsocketType {
   const [queue, setQueue] = useState<Item[]>([

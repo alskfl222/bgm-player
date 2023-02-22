@@ -18,10 +18,10 @@ export default function ProgressBar({
     <div className='w-full flex justify-between gap-4 text-sm'>
       <div className='w-full flex justify-between gap-4'>
         <span className='flex-none'>{formatTime(current)}</span>
-        <div className='relative w-full border rounded-md bg-white'>
+        <div className='relative w-full border rounded-lg bg-white'>
           <div className='absolute inset-0 flex items-center'>
             <div
-              className=' rounded-md bg-sky-300'
+              className='mx-0.5 rounded-md bg-sky-300'
               style={{ width: `${percent}%`, height: '80%' }}
             />
           </div>
