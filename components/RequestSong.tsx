@@ -12,6 +12,9 @@ export default function RequestSong({ send }: Pick<WebsocketType, 'send'>) {
       send('append', { query, from: 'streamer' });
     }
   };
+  const onClickUpdate = (): void => {
+    send('update', { from: 'streamer' });
+  };
   const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'Enter') {
       onClick();
@@ -31,6 +34,12 @@ export default function RequestSong({ send }: Pick<WebsocketType, 'send'>) {
         onClick={onClick}
       >
         추가
+      </button>
+      <button
+        className='flex-none p-2 border rounded-xl hover:bg-neutral-300'
+        onClick={onClickUpdate}
+      >
+        업데이트
       </button>
     </div>
   );

@@ -16,13 +16,16 @@ export function useWebsocket(sessionType: string): WebsocketType {
     },
   ]);
   const [id, setId] = useState<string>('');
+  const [isPlay, setIsPlay] = useState<boolean>(false);
+  const [currentTime, setCurrentTime] = useState<number>(0);
+  const [duration, setDuration] = useState<number>(0);
   const ws = useRef<WebSocket | null>(null);
 
   const send = useCallback(
     (eventName: string, data?: any) => {
       ws.current?.send(
         JSON.stringify({
-          session: { type: sessionType, event: `bgm.${eventName}`, id },
+          event: { type: sessionType, name: `bgm.${eventName}`, id },
           data: data ? data : queue[0],
         })
       );
@@ -40,20 +43,24 @@ export function useWebsocket(sessionType: string): WebsocketType {
     console.log('ws close');
   }, []);
 
-  const onMessage = useCallback((ev: MessageEvent<any>) => {
-    console.log('get message');
-    const wsData = JSON.parse(ev.data);
-    const { session, data } = wsData;
-    const [eventType, eventName] = session.event.split('.');
-    if (eventType === 'bgm') {
-      if (eventName === 'queue') {
-        setQueue(data.queue);
-      }
-      if (eventName === 'session') {
+  const onMessage = useCallback(
+    (ev: MessageEvent<any>) => {
+      console.log('get message');
+      const wsData = JSON.parse(ev.data);
+      const { event, data } = wsData;
+      const eventMsg = event.message;
+      if (!eventMsg) {
         setId(data.session_id);
+        return;
       }
-    }
-  }, []);
+      const playState = eventMsg === 'start' ? true : false;
+      setQueue(data.queue);
+      setCurrentTime(Number(data.current_time));
+      if (duration === 0) setDuration(Number(data.duration));
+      setIsPlay(playState);
+    },
+    [duration]
+  );
 
   const onError = useCallback((ev: Event) => {
     console.log(ev);
@@ -76,5 +83,5 @@ export function useWebsocket(sessionType: string): WebsocketType {
     // eslint-disable-next-line
   }, []);
 
-  return { queue, send };
+  return { queue, currentTime, duration, isPlay, send };
 }

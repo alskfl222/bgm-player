@@ -1,10 +1,37 @@
-import { WebsocketType } from '@/types';
 import { useState, useEffect, useRef } from 'react';
+import { WebsocketType } from '@/types';
 import ListItem from './ListItem';
 
-export default function Now({ queue }: Pick<WebsocketType, 'queue'>) {
+export default function Now({
+  queue,
+  currentTime,
+  duration,
+  isPlay,
+}: Omit<WebsocketType, 'send'>) {
   const [show, setShow] = useState(false);
+  const [current, setCurrent] = useState(currentTime);
   const now = useRef(null);
+  const timer = useRef<null | NodeJS.Timer>(null);
+
+  useEffect(() => {
+    setCurrent(currentTime);
+    if (timer.current !== null) {
+      clearInterval(timer.current);
+      timer.current = null;
+    }
+    if (isPlay) timer.current = setInterval(startTimer, 1000);
+
+    return () => {
+      if (timer.current !== null) {
+        clearInterval(timer.current);
+        timer.current = null;
+      }
+    };
+  }, [currentTime, isPlay]);
+
+  const startTimer = () => {
+    setCurrent((curr) => curr + 1);
+  };
 
   useEffect(() => {
     const io = new IntersectionObserver(
@@ -42,6 +69,9 @@ export default function Now({ queue }: Pick<WebsocketType, 'queue'>) {
         </div>
       )}
       <div ref={now}>
+        <div>
+          {current} : {duration} / {isPlay ? 'ON' : 'OFF'}
+        </div>
         <ListItem item={queue[0]} idx={0} />
       </div>
     </>

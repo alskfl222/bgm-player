@@ -7,7 +7,8 @@ import Now from '@/components/Now';
 import { useWebsocket } from '@/hooks/useWebsocket';
 
 export default function Home() {
-  const { queue, send } = useWebsocket('controller');
+  const { queue, currentTime, duration, isPlay, send } =
+    useWebsocket('controller');
   return (
     <>
       <Head>
@@ -24,7 +25,12 @@ export default function Home() {
         <div className='w-full max-w-[480px] p-2 flex flex-col items-center gap-4'>
           <YoutubePlayer queue={queue} send={send} />
           <RequestSong send={send} />
-          <Now queue={queue} />
+          <Now
+            queue={queue}
+            currentTime={currentTime}
+            duration={duration}
+            isPlay={isPlay}
+          />
           <List queue={queue} />
         </div>
       </div>

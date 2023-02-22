@@ -1,7 +1,10 @@
 import YouTube, { YouTubeProps } from 'react-youtube';
 import { WebsocketType } from '@/types';
 
-export function YoutubePlayer({ queue, send }: WebsocketType) {
+export function YoutubePlayer({
+  queue,
+  send,
+}: Pick<WebsocketType, 'queue' | 'send'>) {
   const opts: YouTubeProps['opts'] = {
     width: '480',
     height: '270',
@@ -20,9 +23,9 @@ export function YoutubePlayer({ queue, send }: WebsocketType) {
   const onStateChange: YouTubeProps['onStateChange'] = (e) => {
     // https://developers.google.com/youtube/iframe_api_reference#Events
     console.log('onStateChange', e.data);
-    console.log('getCurrentTime', e.target.getCurrentTime());
     const currentTime = e.target.getCurrentTime().toFixed(2);
-    const data = { ...queue[0], current: currentTime };
+    const duration = e.target.getDuration().toFixed(2);
+    const data = { ...queue[0], current: currentTime, duration };
     if (e.data === -1) {
       console.log('시작되지 않음');
     }
@@ -32,17 +35,18 @@ export function YoutubePlayer({ queue, send }: WebsocketType) {
       send('stop', data);
     }
     if (e.data === 1) {
-      // if (e.target.isMuted()) {
-      //   console.log('음소거');
-      //   e.target.unMute();
-      // } else console.log('음소거 아님');
       send('play', data);
+      // setTimeout(() => {
+      //   const currentTime = e.target.getCurrentTime().toFixed(2);
+      //   const duration = e.target.getDuration().toFixed(2);
+      //   send('play', { ...data, current: currentTime, duration });
+      // }, 1000);
     }
     if (e.data === 2) {
       send('pause', data);
     }
     if (e.data === 3) {
-      send('buffering', data)
+      send('buffering', data);
     }
   };
 
