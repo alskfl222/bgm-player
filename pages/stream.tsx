@@ -32,7 +32,7 @@ export default function Stream() {
     setCurrent((curr) => curr + 1);
   };
 
-  const percent = duration !== 0 ? ((current / duration) * 100).toFixed() : 0
+  const percent = duration !== 0 ? ((current / duration) * 100).toFixed() : 0;
 
   return (
     <>
@@ -47,13 +47,15 @@ export default function Stream() {
                   rounded-tr-3xl bg-neutral-700'
       >
         <div className='w-full flex flex-col justify-center gap-6 text-neutral-100'>
-          <span className='text-3xl font-bold leading-normal'>{title}</span>
-          <div className='w-full px-4 flex justify-between gap-4'>
-            <span className='w-full text-xl font-bold text-ellipsis whitespace-nowrap overflow-hidden'>
+          <span className='max-h-[120px] text-[42px] font-bold leading-normal break-normal overflow-hidden'>
+            {title}
+          </span>
+          <div className='grow w-full flex justify-between items-center gap-4'>
+            <span className='grow text-2xl font-bold text-ellipsis whitespace-nowrap overflow-hidden'>
               {queue[0].channel}
             </span>
-            <span className='flex-none text-xl'>{queue[0].from}</span>
-            <span className='flex-none text-xl'>{percent}%</span>
+            <span className='flex-none text-2xl'>{queue[0].from}</span>
+            <span className='flex-none w-[80px] flex justify-end text-2xl'>{percent}%</span>
           </div>
         </div>
       </div>
