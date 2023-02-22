@@ -69,20 +69,16 @@ export default function Now({
               </div>
               <span className='flex-none'>{queue[0].from}</span>
             </div>
-            <div className='w-full flex justify-between items-center gap-4'>
-              <ProgressBar
-                current={current}
-                duration={duration}
-                isPlay={isPlay}
-              />
-            </div>
+            <ProgressBar
+              current={current}
+              duration={duration}
+              isPlay={isPlay}
+            />
           </div>
         </div>
       )}
-      <div ref={now}>
-        <div className='p-4 flex justify-between gap-4 bg-neutral-300 text-sm'>
-          <ProgressBar current={current} duration={duration} isPlay={isPlay} />
-        </div>
+      <div ref={now} className='w-screen max-w-[480px] px-4 py-8 flex flex-col gap-6 bg-neutral-300'>
+        <ProgressBar current={current} duration={duration} isPlay={isPlay} />
         <ListItem item={queue[0]} idx={0} />
       </div>
     </>
