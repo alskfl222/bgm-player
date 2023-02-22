@@ -1,32 +1,48 @@
-import { ChangeEvent, useState, useContext } from 'react';
-import { WebsocketContext } from '@/contexts/websocket';
+import { ChangeEvent, useState } from 'react';
+import { WebsocketType } from '@/types';
 
-export default function RequestSong() {
-  const { send } = useContext(WebsocketContext);
+export default function RequestSong({ send }: Pick<WebsocketType, 'send'>) {
   const [query, setQuery] = useState<string>('');
   const onChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setQuery(e.target.value);
   };
   const onClick = (): void => {
-    send('append', { query, from: 'streamer' });
+    if (query) {
+      setQuery('');
+      send('append', { query, from: 'streamer' });
+    }
+  };
+  const onClickUpdate = (): void => {
+    send('update', { from: 'streamer' });
   };
   const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-    if (e.key === 'Enter') onClick();
+    if (e.key === 'Enter') {
+      onClick();
+    }
   };
   return (
-    <div className='w-full flex justify-between gap-4'>
+    <div className='w-full flex justify-between gap-8'>
       <input
-        className='w-full h-12 px-4 border-b border-b-neutral-700'
+        className='w-full h-8 px-2 border-b border-b-neutral-700'
         type='text'
+        value={query}
         onChange={onChange}
         onKeyUp={(e) => onKeyUp(e)}
       />
-      <button
-        className='flex-none p-2 border rounded-xl hover:bg-neutral-300'
-        onClick={onClick}
-      >
-        추가
-      </button>
+      <div className='flex-none flex gap-4'>
+        <button
+          className='px-2 py-1 border rounded-xl hover:bg-neutral-300'
+          onClick={onClick}
+        >
+          추가
+        </button>
+        <button
+          className='px-2 py-1 border rounded-xl hover:bg-neutral-300'
+          onClick={onClickUpdate}
+        >
+          업데이트
+        </button>
+      </div>
     </div>
   );
 }

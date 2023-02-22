@@ -7,7 +7,10 @@ export type Item = {
   channel_id: string;
 };
 
-export type WebsocketContextType = {
+export type WebsocketType = {
   queue: Item[];
+  currentTime: number;
+  duration: number;
+  isPlay: boolean;
   send: (eventName: string, data?: any) => void;
 };
