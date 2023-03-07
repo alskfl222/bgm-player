@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next build && PORT=3456 next start",
+    "dev": "next build && cross-env PORT=3456 next start",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -26,6 +26,7 @@
   "devDependencies": {
     "@types/lodash": "^4.14.191",
     "autoprefixer": "^10.4.13",
+    "cross-env": "^7.0.3",
     "postcss": "^8.4.21",
     "tailwindcss": "^3.2.6"
   }

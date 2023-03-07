@@ -2,11 +2,11 @@ import { useState, useEffect, useRef, useCallback, useContext } from 'react';
 import { ToastContext } from '@/contexts/toast';
 import { Item, WebsocketType } from '@/types';
 
-// const WS_SERVER_URL = process.env.NEXT_PUBLIC_CLOUD!
-const WS_SERVER_URL = process.env.NEXT_PUBLIC_LOCAL!;
+const WS_SERVER_URL = process.env.NEXT_PUBLIC_CLOUD!
+// const WS_SERVER_URL = process.env.NEXT_PUBLIC_LOCAL!;
 
 export function useWebsocket(sessionType: string): WebsocketType {
-  const { toasts, addToast } = useContext(ToastContext);
+  const { addToast } = useContext(ToastContext);
   const [queue, setQueue] = useState<Item[]>([
     {
       title: '몽환의 숲 (Phantasmal Woods) [메이플스토리 OST : 아케인 리버]',
