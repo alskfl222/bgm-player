@@ -54,7 +54,7 @@ export default function Now({
   return (
     <>
       {show && (
-        <div className='fixed top-0 w-screen p-4 flex justify-center bg-neutral-300'>
+        <div className='fixed top-0 w-screen p-4 flex justify-center bg-neutral-200'>
           <div className='w-[480px] p-2 flex flex-col justify-center items-center gap-2'>
             <div className='w-full flex justify-between items-center'>
               <div className='font-bold whitespace-nowrap text-ellipsis overflow-hidden'>
@@ -70,6 +70,8 @@ export default function Now({
               <span className='flex-none'>{queue[0].from}</span>
             </div>
             <ProgressBar
+              queue={queue}
+              send={send}
               current={current}
               duration={duration}
               isPlay={isPlay}
@@ -77,8 +79,17 @@ export default function Now({
           </div>
         </div>
       )}
-      <div ref={now} className='w-screen max-w-[480px] px-4 py-8 flex flex-col gap-6 bg-neutral-300'>
-        <ProgressBar current={current} duration={duration} isPlay={isPlay} />
+      <div
+        ref={now}
+        className='w-screen max-w-[480px] px-4 py-8 flex flex-col gap-6 bg-neutral-200'
+      >
+        <ProgressBar
+          queue={queue}
+          send={send}
+          current={current}
+          duration={duration}
+          isPlay={isPlay}
+        />
         <ListItem item={queue[0]} idx={0} />
       </div>
     </>

@@ -1,10 +1,13 @@
+import { useContext } from 'react';
 import YouTube, { YouTubeProps } from 'react-youtube';
 import { WebsocketType } from '@/types';
+import { PlayerContext } from '@/contexts/player';
 
 export function YoutubePlayer({
   queue,
   send,
 }: Pick<WebsocketType, 'queue' | 'send'>) {
+  const { playerRef } = useContext(PlayerContext);
   const opts: YouTubeProps['opts'] = {
     width: '480',
     height: '270',
@@ -63,6 +66,7 @@ export function YoutubePlayer({
   return (
     <YouTube
       id='player'
+      ref={playerRef}
       videoId={queue[0].id}
       opts={opts}
       onReady={onReady}
