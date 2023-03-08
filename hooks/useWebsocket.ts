@@ -52,7 +52,6 @@ export function useWebsocket(sessionType: string): WebsocketType {
       const { event, data } = wsData;
       const { type, name, message: eventMsg } = event;
       if (type === 'stream' && name === 'obs.next') {
-        console.log({ type: name, data });
         addToast({ type: name, data });
         return;
       }
@@ -66,7 +65,7 @@ export function useWebsocket(sessionType: string): WebsocketType {
       if (duration === 0) setDuration(Number(data.duration));
       setIsPlay(playState);
     },
-    [duration]
+    [duration, addToast]
   );
 
   const onError = useCallback((ev: Event) => {

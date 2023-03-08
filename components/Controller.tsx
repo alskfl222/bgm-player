@@ -1,5 +1,6 @@
 import { ChangeEvent, useState } from 'react';
-import { GrFormAdd, GrLink, GrSend } from 'react-icons/gr';
+import { GrFormAdd, GrLink, GrSend, GrCheckmark } from 'react-icons/gr';
+import { GiCancel } from 'react-icons/gi';
 import { MdRefresh } from 'react-icons/md';
 import { WebsocketType } from '@/types';
 
@@ -22,8 +23,24 @@ export default function Controller({ send }: Pick<WebsocketType, 'send'>) {
   const onClickUpdate = (): void => {
     send('update', { from: 'streamer' });
   };
+  const onClickOpen = (): void => {
+    setIsOpen((isOpen) => !isOpen);
+  };
   const onChangeStreamId = (e: ChangeEvent<HTMLInputElement>): void => {
     setStreamId(e.target.value);
+  };
+  const onClickCheck = (): void => {
+    fetch(`${SERVER_URL}/observer/alive`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data !== null) setIsConnect(false);
+        alert(data);
+      });
   };
   const onClickConnect = (): void => {
     fetch(`${SERVER_URL}/observer`, {
@@ -39,7 +56,24 @@ export default function Controller({ send }: Pick<WebsocketType, 'send'>) {
           setIsConnect(true);
           setIsOpen(false);
         } else {
+          setIsConnect(false);
           alert('Connecting ERROR');
+        }
+      });
+  };
+  const onClickDisconnect = (): void => {
+    fetch(`${SERVER_URL}/observer/stop`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data === null) {
+          setIsConnect(false);
+        } else {
+          alert('Something ERROR');
         }
       });
   };
@@ -72,9 +106,9 @@ export default function Controller({ send }: Pick<WebsocketType, 'send'>) {
         </button>
         <button
           className={`px-2 py-1 border rounded-xl ${
-            isConnect ? 'bg-lime-300' : 'bg-white'
-          } hover:bg-neutral-300`}
-          onClick={() => setIsOpen((isOpen) => !isOpen)}
+            isConnect ? 'bg-lime-300' : 'bg-white hover:bg-neutral-300'
+          } `}
+          onClick={onClickOpen}
         >
           <GrLink />
         </button>
@@ -92,11 +126,29 @@ export default function Controller({ send }: Pick<WebsocketType, 'send'>) {
             onChange={onChangeStreamId}
           />
           <button
-            className='px-2 py-1 border rounded-xl  hover:bg-neutral-300'
-            onClick={onClickConnect}
+            disabled={!isConnect}
+            className={`px-2 py-1 border rounded-xl ${
+              isConnect ? 'hover:bg-neutral-300' : 'bg-neutral-300'
+            } `}
+            onClick={onClickDisconnect}
           >
-            <GrSend />
+            <GiCancel />
           </button>
+          {isConnect ? (
+            <button
+              className='px-2 py-1 border rounded-xl  hover:bg-neutral-300'
+              onClick={onClickCheck}
+            >
+              <GrCheckmark />
+            </button>
+          ) : (
+            <button
+              className='px-2 py-1 border rounded-xl  hover:bg-neutral-300'
+              onClick={onClickConnect}
+            >
+              <GrSend />
+            </button>
+          )}
         </div>
       )}
     </div>
