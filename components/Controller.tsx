@@ -4,6 +4,7 @@ import { GiCancel } from 'react-icons/gi';
 import { MdRefresh } from 'react-icons/md';
 import { WebsocketType } from '@/types';
 
+// const SERVER_URL = process.env.NEXT_PUBLIC_LOCAL!;
 const SERVER_URL = process.env.NEXT_PUBLIC_CLOUD!;
 
 export default function Controller({ send }: Pick<WebsocketType, 'send'>) {

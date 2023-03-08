@@ -32,7 +32,7 @@ export default function Home() {
             isPlay={isPlay}
             send={send}
           />
-          <List queue={queue} />
+          <List queue={queue} send={send} />
         </div>
       </div>
     </>
