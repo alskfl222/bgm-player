@@ -28,7 +28,7 @@ export default function Stream() {
   }, [currentTime, isPlay]);
 
   useEffect(() => {
-    if (toasts.length > 0) setTimeout(removeToast, 30000);
+    if (toasts.length > 0) setTimeout(removeToast, 10000);
   }, [toasts, removeToast]);
 
   const title =
