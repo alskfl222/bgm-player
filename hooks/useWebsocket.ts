@@ -47,7 +47,6 @@ export function useWebsocket(sessionType: string): WebsocketType {
 
   const onMessage = useCallback(
     (ev: MessageEvent<any>) => {
-      console.log('get message');
       const wsData = JSON.parse(ev.data);
       const { event, data } = wsData;
       const { type, name, message: eventMsg } = event;
