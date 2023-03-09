@@ -17,6 +17,7 @@ export default function ProgressBar({
 }) {
   const { playerRef } = useContext(PlayerContext);
   const formatTime = (time: number): string => {
+    if (time === 0) return '0 : 00';
     return `${Math.floor(time / 60)} : ${Math.floor(time % 60)
       .toString()
       .padStart(2, '0')}`;
