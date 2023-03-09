@@ -12,7 +12,7 @@ export default function ListItem({ item, idx, send }: ListItemProps) {
   const title =
     item.title.length > 50 ? item.title.slice(0, 47) + '...' : item.title;
   const onClickDelete = (idx: number) => {
-    if (send) send('delete', { idx });
+    if (send) send('bgm.delete', { idx });
   };
   return (
     <div

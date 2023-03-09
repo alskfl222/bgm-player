@@ -28,7 +28,7 @@ export default function ProgressBar({
     const player = playerRef?.current?.internalPlayer;
     player?.loadVideoById(queue[1].id);
     player?.playVideo();
-    send('stop', data);
+    send('bgm.stop', data);
   };
 
   return (

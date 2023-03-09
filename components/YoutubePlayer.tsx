@@ -35,10 +35,10 @@ export function YoutubePlayer({
     if (e.data === 0) {
       e.target.loadVideoById(queue[1].id);
       e.target.playVideo();
-      send('stop', data);
+      send('bgm.stop', data);
     }
     if (e.data === 1) {
-      send('play', data);
+      send('bgm.play', data);
       // setTimeout(() => {
       //   const currentTime = e.target.getCurrentTime().toFixed(2);
       //   const duration = e.target.getDuration().toFixed(2);
@@ -46,10 +46,10 @@ export function YoutubePlayer({
       // }, 1000);
     }
     if (e.data === 2) {
-      send('pause', data);
+      send('bgm.pause', data);
     }
     if (e.data === 3) {
-      send('buffering', data);
+      send('bgm.buffering', data);
     }
   };
 
@@ -59,8 +59,8 @@ export function YoutubePlayer({
     if (e.data === 101 || e.data === 150) {
       e.target.loadVideoById(queue[1].id);
       e.target.playVideo();
-      send('inactive');
-      send('stop');
+      send('bgm.inactive');
+      send('bgm.stop');
     }
   };
   return (

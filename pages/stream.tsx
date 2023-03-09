@@ -42,6 +42,11 @@ export default function Stream() {
 
   const percent = duration !== 0 ? ((current / duration) * 100).toFixed() : 0;
 
+  const getToastComponent = (name: string) => {
+    if (name === 'obs.next') return <NextStream toast={toasts[0]} />;
+    return null;
+  };
+
   return (
     <>
       <Head>
@@ -51,7 +56,7 @@ export default function Stream() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       {toasts[0] ? (
-        <NextStream toast={toasts[0]} />
+        getToastComponent(toasts[0].name)
       ) : (
         <NowStream
           title={title}
