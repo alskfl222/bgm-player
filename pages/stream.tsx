@@ -28,7 +28,7 @@ export default function Stream() {
   }, [currentTime, isPlay]);
 
   useEffect(() => {
-    if (toasts.length > 0) setTimeout(removeToast, 30000);
+    if (toasts.length > 0) setTimeout(removeToast, 5000);
   }, [toasts, removeToast]);
 
   const title =
@@ -42,6 +42,11 @@ export default function Stream() {
 
   const percent = duration !== 0 ? ((current / duration) * 100).toFixed() : 0;
 
+  const getToastComponent = (name: string) => {
+    if (name === 'obs.next') return <NextStream toast={toasts[0]} />;
+    return null;
+  };
+
   return (
     <>
       <Head>
@@ -51,7 +56,7 @@ export default function Stream() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       {toasts[0] ? (
-        <NextStream toast={toasts[0]} />
+        getToastComponent(toasts[0].name)
       ) : (
         <NowStream
           title={title}
@@ -59,25 +64,6 @@ export default function Stream() {
           from={queue[0].from}
           percent={percent}
         />
-        // <div
-        //   className='relative w-[600px] h-[240px] p-12 flex justify-center items-center
-        //           rounded-tr-3xl bg-neutral-700 overflow-hidden'
-        // >
-        //   <div className='w-full flex flex-col justify-center gap-6 text-neutral-100'>
-        //     <span className='max-h-[120px] text-[42px] font-bold leading-normal break-normal overflow-hidden'>
-        //       {title}
-        //     </span>
-        //     <div className='grow w-full flex justify-between items-center gap-4'>
-        //       <span className='grow text-2xl font-bold text-ellipsis whitespace-nowrap overflow-hidden'>
-        //         {queue[0].channel}
-        //       </span>
-        //       <span className='flex-none text-2xl'>{queue[0].from}</span>
-        //       <span className='flex-none w-[80px] flex justify-end text-2xl'>
-        //         {percent}%
-        //       </span>
-        //     </div>
-        //   </div>
-        // </div>
       )}
     </>
   );

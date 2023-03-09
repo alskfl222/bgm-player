@@ -3,7 +3,7 @@ import { ToastContext } from '@/contexts/toast';
 import { Item, WebsocketType } from '@/types';
 
 // const WS_SERVER_URL = process.env.NEXT_PUBLIC_WS_LOCAL!;
-const WS_SERVER_URL = process.env.NEXT_PUBLIC_WS_CLOUD!
+const WS_SERVER_URL = process.env.NEXT_PUBLIC_WS_CLOUD!;
 
 export function useWebsocket(sessionType: string): WebsocketType {
   const { addToast } = useContext(ToastContext);
@@ -24,10 +24,10 @@ export function useWebsocket(sessionType: string): WebsocketType {
   const ws = useRef<WebSocket | null>(null);
 
   const send = useCallback(
-    (eventName: string, data?: any) => {
+    (name: string, data?: any) => {
       ws.current?.send(
         JSON.stringify({
-          event: { type: sessionType, name: `bgm.${eventName}`, id },
+          event: { from: sessionType, name, id },
           data: data ? data : queue[0],
         })
       );
@@ -35,7 +35,7 @@ export function useWebsocket(sessionType: string): WebsocketType {
     [sessionType, queue, id]
   );
 
-  const onOpen = useCallback((ev: Event) => {
+  const onOpen = useCallback(() => {
     console.log(`SERVER ${WS_SERVER_URL} connected`);
     send('session', {});
     // eslint-disable-next-line
@@ -49,16 +49,18 @@ export function useWebsocket(sessionType: string): WebsocketType {
     (ev: MessageEvent<any>) => {
       const wsData = JSON.parse(ev.data);
       const { event, data } = wsData;
-      const { type, name, message: eventMsg } = event;
-      if (type === 'stream' && name === 'obs.next') {
-        addToast({ type: name, data });
-        return;
+      const { to, name, message } = event;
+      if (to === 'stream') {
+        if (name === 'obs.next') {
+          addToast({ name, data });
+          return;
+        }
       }
-      if (!eventMsg) {
+      if (name === 'session') {
         setId(data.sessionId);
         return;
       }
-      const playState = eventMsg === 'start' ? true : false;
+      const playState = message === 'start' ? true : false;
       setQueue(data.queue);
       setCurrentTime(Number(data.currentTime));
       if (duration === 0) setDuration(Number(data.duration));

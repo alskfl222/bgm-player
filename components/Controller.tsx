@@ -18,11 +18,11 @@ export default function Controller({ send }: Pick<WebsocketType, 'send'>) {
   const onClick = (): void => {
     if (query) {
       setQuery('');
-      send('append', { query, from: 'streamer' });
+      send('bgm.append', { query, from: 'streamer' });
     }
   };
   const onClickUpdate = (): void => {
-    send('update', { from: 'streamer' });
+    send('bgm.update', { from: 'streamer' });
   };
   const onClickOpen = (): void => {
     setIsOpen((isOpen) => !isOpen);

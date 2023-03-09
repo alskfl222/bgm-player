@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useState } from 'react';
 
-type ToastItem = { type: string; data: any };
+type ToastItem = { name: string; data: any };
 type ToastContextType = {
   toasts: ToastItem[];
   addToast: (item: ToastItem) => void;
