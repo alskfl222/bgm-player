@@ -49,7 +49,7 @@ export function useWebsocket(sessionType: string): WebsocketType {
     (ev: MessageEvent<any>) => {
       const wsData = JSON.parse(ev.data);
       const { event, data } = wsData;
-      const { to, name, message } = event;
+      const { to, name } = event;
       if (to === 'stream') {
         if (name === 'obs.next') {
           addToast({ name, data });
@@ -60,13 +60,12 @@ export function useWebsocket(sessionType: string): WebsocketType {
         setId(data.sessionId);
         return;
       }
-      const playState = message === 'start' ? true : false;
       setQueue(data.queue);
-      setCurrentTime(Number(data.currentTime));
-      if (duration === 0) setDuration(Number(data.duration));
-      setIsPlay(playState);
+      setIsPlay(data.bgm.active);
+      if (currentTime === 0) setCurrentTime(Number(data.bgm.currentTime));
+      if (duration === 0) setDuration(Number(data.bgm.duration));
     },
-    [duration, addToast]
+    [currentTime, duration, addToast]
   );
 
   const onError = useCallback((ev: Event) => {
