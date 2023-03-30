@@ -2,8 +2,7 @@ import { useState, useEffect, useRef, useCallback, useContext } from 'react';
 import { ToastContext } from '@/contexts/toast';
 import { Item, WebsocketType } from '@/types';
 
-// const WS_SERVER_URL = process.env.NEXT_PUBLIC_WS_LOCAL!;
-const WS_SERVER_URL = process.env.NEXT_PUBLIC_WS_CLOUD!;
+const WS_SERVER_URL = process.env.NEXT_PUBLIC_WS_SERVER!
 
 export function useWebsocket(sessionType: string): WebsocketType {
   const { addToast } = useContext(ToastContext);
