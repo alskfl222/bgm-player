@@ -1,17 +1,34 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, useEffect } from 'react';
 import { GrFormAdd, GrLink, GrSend, GrCheckmark } from 'react-icons/gr';
 import { GiCancel } from 'react-icons/gi';
 import { MdRefresh } from 'react-icons/md';
 import { WebsocketType } from '@/types';
 
-// const SERVER_URL = process.env.NEXT_PUBLIC_LOCAL!;
-const SERVER_URL = process.env.NEXT_PUBLIC_CLOUD!;
+const SERVER_URL = process.env.NEXT_PUBLIC_SERVER!
 
 export default function Controller({ send }: Pick<WebsocketType, 'send'>) {
   const [query, setQuery] = useState<string>('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [streamId, setStreamId] = useState<string>('');
   const [isConnect, setIsConnect] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (sessionStorage.getItem('streamId'))
+      setStreamId(sessionStorage.getItem('streamId')!);
+  }, []);
+
+  useEffect(() => {
+    let checker: NodeJS.Timer | null;
+    if (streamId.trim() && streamId.trim().length > 10) {
+      if (isConnect) checker = setInterval(onClickCheck, 5000);
+      else onClickConnect();
+    }
+    return () => {
+      if (checker) clearInterval(checker);
+    };
+    // eslint-disable-next-line
+  }, [streamId, isConnect]);
+
   const onChangeQuery = (e: ChangeEvent<HTMLInputElement>): void => {
     setQuery(e.target.value);
   };
@@ -29,6 +46,7 @@ export default function Controller({ send }: Pick<WebsocketType, 'send'>) {
   };
   const onChangeStreamId = (e: ChangeEvent<HTMLInputElement>): void => {
     setStreamId(e.target.value);
+    sessionStorage.setItem('streamId', e.target.value);
   };
   const onClickCheck = (): void => {
     fetch(`${SERVER_URL}/observer/alive`, {
@@ -40,7 +58,7 @@ export default function Controller({ send }: Pick<WebsocketType, 'send'>) {
       .then((res) => res.json())
       .then((data) => {
         if (data !== null) setIsConnect(false);
-        alert(data);
+        console.log(data);
       });
   };
   const onClickConnect = (): void => {
@@ -58,7 +76,7 @@ export default function Controller({ send }: Pick<WebsocketType, 'send'>) {
           setIsOpen(false);
         } else {
           setIsConnect(false);
-          alert('Connecting ERROR');
+          console.log('Connecting ERROR');
         }
       });
   };
@@ -74,7 +92,7 @@ export default function Controller({ send }: Pick<WebsocketType, 'send'>) {
         if (data === null) {
           setIsConnect(false);
         } else {
-          alert('Something ERROR');
+          console.log('Something ERROR');
         }
       });
   };
@@ -83,6 +101,7 @@ export default function Controller({ send }: Pick<WebsocketType, 'send'>) {
       onClick();
     }
   };
+
   return (
     <div className='relative w-full flex justify-between gap-8'>
       <input
