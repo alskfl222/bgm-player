@@ -35,7 +35,7 @@ export default function Controller({ send }: Pick<WebsocketType, 'send'>) {
   const onClick = (): void => {
     if (query) {
       setQuery('');
-      send('bgm.append', { query, from: 'streamer' });
+      send('bgm.find', { query, from: 'streamer' });
     }
   };
   const onClickUpdate = (): void => {
